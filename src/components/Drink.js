@@ -9,6 +9,7 @@ import {
   Image,
   StyleSheet,
   TouchableHighlight,
+  Animated
 } from 'react-native'
 import { apiURL } from '../globals'
 
@@ -42,6 +43,36 @@ const Instructions = ({
   </View>
 )
 
+class FadeInView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fadeAnim: new Animated.Value(325), // init opacity 0
+    };
+  }
+
+  componentDidMount() {
+    Animated.timing(          // Uses easing functions
+      this.state.fadeAnim,    // The value to drive
+      { toValue: 0 }            // Configuration
+    ).start();                // Don't forget start!
+  }
+
+  render() {
+    return (
+      <Animated.View
+        style={{
+          transform: [
+            {translateX: this.state.fadeAnim}
+          ]
+        }}
+      >
+        {this.props.children}
+      </Animated.View>
+    );
+  }
+}
+
 class Drink extends Component {
 
   constructor(props) {
@@ -65,79 +96,64 @@ class Drink extends Component {
     } = this.props
 
     return (
-      <View
-        style={styles.card}
-      >
-        <TouchableHighlight
-
-          onPress={this.toggleInfo.bind(this)}
-
-          onPressIn={e => {
-            console.log(e.nativeEvent)
-            this.setState({
-              dragging: true
-            })
-          }}
-
-          onPressOut={e => {
-            console.log(e.nativeEvent)
-            this.setState({
-              dragging: false
-            })
-          }}
+      <FadeInView>
+        <View
+          style={styles.card}
         >
-          <View>
-            <Image
-              style={[
+          <TouchableHighlight
+            onPress={this.toggleInfo.bind(this)}
+          >
+            <View>
+              <Image
+                style={[
                 styles.image,
                 { opacity: this.state.isShowingInfo ? .125 : 1 },
               ]}
-              source={{uri: `${apiURL}/image/${id}`}}
-            />
+                source={{uri: `${apiURL}/image/${id}`}}
+              />
 
-            <Ingredients
-              ingredients={ingredients}
-              show={this.state.isShowingInfo}
-            />
+              <Ingredients
+                ingredients={ingredients}
+                show={this.state.isShowingInfo}
+              />
 
-            <Instructions show={this.state.isShowingInfo}>
-              {instructions}
-            </Instructions>
-          </View>
-        </TouchableHighlight>
+              <Instructions show={this.state.isShowingInfo}>
+                {instructions}
+              </Instructions>
+            </View>
+          </TouchableHighlight>
 
-        <Text style={styles.title}>
-          {title}
-        </Text>
+          <Text style={styles.title}>
+            {title}
+          </Text>
 
-        <TouchableHighlight
-          onPress={() => {
-            onSwipeForward()
-          }}
-        >
-          <Text>Next Drink</Text>
-        </TouchableHighlight>
+          {/*<TouchableHighlight*/}
+            {/*onPress={() => {*/}
+            {/*onSwipeForward()*/}
+          {/*}}*/}
+          {/*>*/}
+            {/*<Text>Next Drink</Text>*/}
+          {/*</TouchableHighlight>*/}
 
-        <TouchableHighlight
-          onPress={() => {
-            onSwipeBack()
-          }}
-        >
-          <Text>Previous Drink</Text>
-        </TouchableHighlight>
+          {/*<TouchableHighlight*/}
+            {/*onPress={() => {*/}
+            {/*onSwipeBack()*/}
+          {/*}}*/}
+          {/*>*/}
+            {/*<Text>Previous Drink</Text>*/}
+          {/*</TouchableHighlight>*/}
 
-        <TouchableHighlight onPress={() => {
-          onSwipeUp()
-        }}>
-          <Text>Show Comments and Ratings</Text>
-        </TouchableHighlight>
-      </View>
+          {/*<TouchableHighlight onPress={() => {*/}
+          {/*onSwipeUp()*/}
+        {/*}}>*/}
+            {/*<Text>Show Comments and Ratings</Text>*/}
+          {/*</TouchableHighlight>*/}
+        </View>
+      </FadeInView>
     )
   }
 
-  toggleInfo(e) {
-
-    // console.log(e.nativeEvent)
+  toggleInfo() {
 
     this.setState({
       isShowingInfo: !this.state.isShowingInfo

@@ -9,7 +9,7 @@ import {
   Text,
   View,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
 } from 'react-native'
 import Drink from './Drink'
 import { apiURL } from '../globals'
@@ -60,11 +60,16 @@ class App extends Component {
   }
 
   render() {
+
     const app = this.state.isLoading ?
+
       <Image
         style={styles.iconBig}
         source={require('../../res/cheeers-logo.png')}
-      /> :
+      />
+
+      :
+
       <View>
         <View style={styles.logoTop}>
           <TouchableHighlight onPress={this.newDrink.bind(this)}>
@@ -94,8 +99,9 @@ class App extends Component {
           instructions={this.state.instructions}
           ingredients={this.state.ingredients.map(i => i.measurement + i.title)}
         />
-      </View>
 
+        <View style={styles.offset}/>
+      </View>
 
     return (
       <View style={styles.container}>
@@ -119,12 +125,14 @@ const styles = StyleSheet.create({
   iconSmall: {
     width: 36,
     height: 36,
-    margin: 40
   },
   logoTop: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  offset: {
+    flex: 1
   }
 })
 
