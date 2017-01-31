@@ -13,37 +13,6 @@ import {
 } from 'react-native'
 import { apiURL } from '../globals'
 
-
-const Ingredients = ({
-  ingredients,
-  show
-}) => (
-  <View style={[
-    styles.ingredients,
-    { opacity: show ? 1 : 0 }
-  ]}>
-    {ingredients.map((ingredient, i) =>
-      <Text key={i}>
-        - {ingredient}
-      </Text>
-    )}
-  </View>
-)
-
-const Instructions = ({
-  children,
-  show
-}) => (
-  <View style={[
-    styles.instructions,
-    {opacity: show ? 1 : 0}
-  ]}>
-    <Text>
-      {children}
-    </Text>
-  </View>
-)
-
 const Drink = ({
   ingredients,
   instructions,
@@ -61,16 +30,25 @@ const Drink = ({
         source={{uri: `${apiURL}/image/${id}`}}
       />
 
-      <Ingredients
-        ingredients={ingredients}
-        show={isShowing}
-      />
+      <View style={[
+        styles.ingredients,
+        { opacity: isShowing ? 1 : 0 }
+      ]}>
+        {ingredients.map((ingredient, i) =>
+          <Text key={i}>
+            - {ingredient}
+          </Text>
+        )}
+      </View>
 
-      <Instructions
-        show={isShowing}
-      >
-        {instructions}
-      </Instructions>
+      <View style={[
+        styles.instructions,
+        {opacity: isShowing ? 1 : 0}
+      ]}>
+        <Text>
+          {instructions}
+        </Text>
+      </View>
     </View>
   </TouchableHighlight>
 )

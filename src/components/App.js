@@ -23,8 +23,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-
+  componentWillMount() {
     this.newDrink()
   }
 
@@ -39,13 +38,13 @@ class App extends Component {
       .then(drink => {
 
         this.setState({
-          isLoading: false,
           id: drink.id,
           title: drink.title,
           instructions: drink.instructions,
           ingredients: drink.ingredients,
-          image: drink.image
+          isLoading: false
         })
+
       })
   }
 
