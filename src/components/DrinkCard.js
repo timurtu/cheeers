@@ -110,13 +110,16 @@ class DrinkCard extends Component {
 
           if (gestureState.dx < -150) {
             this.props.onSwipeForward()
-
-          } else if (gestureState.dx === 0 && gestureState.dy === 0) {
+          }
+          else if (gestureState.dx > 150) {
+            this.props.onSwipeBack(this.resetStyles.bind(this))
+          }
+          else if(gestureState.dx === 0 && gestureState.dy === 0) {
             this.toggleInfo()
           }
-          // else if(gestureState.dy < -250) {
-          //   this.props.onSwipeUp()
-          // }
+          else if(gestureState.dy < -250) {
+            this.props.onSwipeUp()
+          }
           else {
             this.resetStyles()
           }

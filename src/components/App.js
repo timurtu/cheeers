@@ -38,15 +38,16 @@ class App extends Component {
       .then(res => res.json())
       .then(data => {
 
-        const drink = {
-          id: data.id,
-          title: data.title,
-          instructions: data.instructions,
-          ingredients: data.ingredients
-        }
-
         this.setState({
-          ...drink,
+          drinks: [
+            {
+              id: data.id,
+              title: data.title,
+              instructions: data.instructions,
+              ingredients: data.ingredients,
+            },
+            ...this.state.drinks,
+          ],
           isLoading: false
         })
       })
@@ -55,7 +56,16 @@ class App extends Component {
 
   previousDrink() {
 
-    console.warn('show previous drink')
+    const { drinks } = this.state
+
+    const save = drinks[0]
+    const newDrink = drinks[1]
+    drinks[0] = newDrink
+    drinks[1] = save
+    this.setState({
+      drinks,
+      isLoading: false
+    })
   }
 
   showComments() {
@@ -64,6 +74,8 @@ class App extends Component {
   }
 
   render() {
+
+    const drink = this.state.drinks[0]
 
     const app = this.state.isLoading ?
       <Image
@@ -85,19 +97,27 @@ class App extends Component {
             this.newDrink()
           }}
 
-          onSwipeBack={() => {
-            this.previousDrink()
+          onSwipeBack={reset => {
+
+            if(this.state.drinks.length === 1) {
+              reset()
+            } else {
+              this.setState({
+                isLoading: true
+              })
+              this.previousDrink()
+            }
           }}
 
           onSwipeUp={() => {
             this.showComments()
           }}
 
-          image={this.state.image}
-          title={this.state.title}
-          id={this.state.id}
-          instructions={this.state.instructions}
-          ingredients={this.state.ingredients.map(i => i.measurement + i.title)}
+          image={drink.image}
+          title={drink.title}
+          id={drink.id}
+          instructions={drink.instructions}
+          ingredients={drink.ingredients.map(i => i.measurement + i.title)}
         />
 
         <View style={styles.offset}/>
