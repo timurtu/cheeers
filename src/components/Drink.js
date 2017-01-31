@@ -47,7 +47,8 @@ class Drink extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isShowingInfo: false
+      isShowingInfo: false,
+      dragging: false
     }
   }
 
@@ -64,13 +65,32 @@ class Drink extends Component {
     } = this.props
 
     return (
-      <View style={styles.card}>
-        <TouchableHighlight onPress={this.toggleInfo.bind(this)}>
+      <View
+        style={styles.card}
+      >
+        <TouchableHighlight
+
+          onPress={this.toggleInfo.bind(this)}
+
+          onPressIn={e => {
+            console.log(e.nativeEvent)
+            this.setState({
+              dragging: true
+            })
+          }}
+
+          onPressOut={e => {
+            console.log(e.nativeEvent)
+            this.setState({
+              dragging: false
+            })
+          }}
+        >
           <View>
             <Image
               style={[
                 styles.image,
-                { opacity: this.state.isShowingInfo ? .125 : 1 }
+                { opacity: this.state.isShowingInfo ? .125 : 1 },
               ]}
               source={{uri: `${apiURL}/image/${id}`}}
             />
@@ -106,10 +126,6 @@ class Drink extends Component {
           <Text>Previous Drink</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight onPress={this.toggleInfo.bind(this)}>
-          <Text>Show drink contents</Text>
-        </TouchableHighlight>
-
         <TouchableHighlight onPress={() => {
           onSwipeUp()
         }}>
@@ -119,7 +135,10 @@ class Drink extends Component {
     )
   }
 
-  toggleInfo() {
+  toggleInfo(e) {
+
+    // console.log(e.nativeEvent)
+
     this.setState({
       isShowingInfo: !this.state.isShowingInfo
     })
@@ -136,10 +155,10 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, .125)',
     shadowOpacity: 1,
     width: 325,
-    height: 450,
+    height: 475,
   },
   title: {
-    fontSize: 26,
+    fontSize: 24,
     borderColor: '#000',
     borderWidth: 2,
     padding: 8,
@@ -150,11 +169,11 @@ const styles = StyleSheet.create({
   instructions: {
     position: 'absolute',
     bottom: 0,
-    padding: 40
+    padding: 20
   },
   ingredients: {
     position: 'absolute',
-    padding: 40,
+    padding: 20,
   }
 })
 
