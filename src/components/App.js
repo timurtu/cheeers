@@ -11,7 +11,7 @@ import {
   Image,
   TouchableHighlight,
 } from 'react-native'
-import Drink from './Drink'
+import DrinkCard from './DrinkCard'
 import { apiURL } from '../globals'
 
 class App extends Component {
@@ -80,7 +80,7 @@ class App extends Component {
           </TouchableHighlight>
         </View>
 
-        <Drink
+        <DrinkCard
           onSwipeForward={() => {
             this.newDrink()
           }}
