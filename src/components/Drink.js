@@ -8,7 +8,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
 } from 'react-native'
 import { apiURL } from '../globals'
 
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, .125)',
     shadowOpacity: 1,
     width: 325,
-    height: 425,
+    height: 450,
   },
   title: {
     fontSize: 26,
