@@ -14,18 +14,24 @@ import {
 import DrinkCard from './DrinkCard'
 import { apiURL } from '../globals'
 
+let nextDrink = null
+
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       isLoading: true,
-      drinks: []
+      drinks: [],
     }
   }
 
   componentWillMount() {
     this.newDrink()
+
+    setInterval(() => {
+      this.cache()
+    }, 1000)
   }
 
   newDrink() {
@@ -34,7 +40,28 @@ class App extends Component {
       isLoading: true
     })
 
-    fetch(apiURL)
+    if (nextDrink !== null) {
+
+      setTimeout(() => {
+        this.setState({
+          drinks: [
+            { ...nextDrink },
+            ...this.state.drinks,
+          ],
+          isLoading: false
+        })
+
+        nextDrink = null
+      }, 10)
+
+    } else {
+
+      this.fetchAndCache()
+    }
+  }
+
+  fetchAndCache() {
+    return fetch(apiURL)
       .then(res => res.json())
       .then(data => {
 
@@ -44,28 +71,50 @@ class App extends Component {
               id: data.id,
               title: data.title,
               instructions: data.instructions,
-              ingredients: data.ingredients,
+              ingredients: data.ingredients
             },
-            ...this.state.drinks,
+            ...this.state.drinks
           ],
           isLoading: false
         })
-      })
 
+        this.cache()
+      })
+  }
+
+  cache() {
+    return fetch(apiURL)
+      .then(res => res.json())
+      .then(data => {
+
+        nextDrink = {
+          id: data.id,
+          title: data.title,
+          instructions: data.instructions,
+          ingredients: data.ingredients
+        }
+      })
   }
 
   previousDrink() {
 
+    this.setState({
+      isLoading: true
+    })
+
     const { drinks } = this.state
 
     const save = drinks[0]
-    const newDrink = drinks[1]
-    drinks[0] = newDrink
+    drinks[0] = drinks[1]
     drinks[1] = save
-    this.setState({
-      drinks,
-      isLoading: false
-    })
+
+    // timeout to make sure loading occurs
+    setTimeout(() => {
+      this.setState({
+        drinks,
+        isLoading: false
+      })
+    }, 10)
   }
 
   showComments() {
@@ -102,9 +151,6 @@ class App extends Component {
             if(this.state.drinks.length === 1) {
               reset()
             } else {
-              this.setState({
-                isLoading: true
-              })
               this.previousDrink()
             }
           }}
@@ -113,7 +159,6 @@ class App extends Component {
             this.showComments()
           }}
 
-          image={drink.image}
           title={drink.title}
           id={drink.id}
           instructions={drink.instructions}
