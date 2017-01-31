@@ -22,11 +22,14 @@ class App extends Component {
   }
 
   newDrink() {
+
+    this.setState({
+      isLoading: true
+    })
+
     fetch(apiURL)
       .then(res => res.json())
       .then(drink => {
-
-        console.log(drink)
 
         this.setState({
           isLoading: false,
@@ -39,6 +42,15 @@ class App extends Component {
       })
   }
 
+  previousDrink() {
+
+    console.warn('show previous drink')
+  }
+
+  showComments() {
+
+    console.warn('show comments and ratings')
+  }
 
   render() {
     const app = this.state.isLoading ?
@@ -48,9 +60,18 @@ class App extends Component {
       /> :
       <View>
         <Drink
-          onClick={() => {
+          onSwipeForward={() => {
             this.newDrink()
           }}
+
+          onSwipeBack={() => {
+            this.previousDrink()
+          }}
+
+          onSwipeUp={() => {
+            this.showComments()
+          }}
+
           image={this.state.image}
           title={this.state.title}
           id={this.state.id}
