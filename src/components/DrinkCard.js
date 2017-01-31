@@ -64,6 +64,7 @@ class DrinkCard extends Component {
     this.state = {
       styles: {},
       isShowingInfo: false,
+      indicatorOpacity: 0,
       panResponder: PanResponder.create({
         // Ask to be the responder:
         onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -82,6 +83,17 @@ class DrinkCard extends Component {
 
           // The accumulated gesture distance since becoming responder is
           // gestureState.d{x,y}
+
+          if(gestureState.dx < -150) {
+            this.setState({
+              indicatorOpacity: 1
+            })
+          } else {
+            this.setState({
+              indicatorOpacity: 0
+            })
+          }
+
           this.setState({
             styles: {
               position: 'relative',
@@ -95,18 +107,22 @@ class DrinkCard extends Component {
         onPanResponderRelease: (evt, gestureState) => {
           // The user has released all touches while this view is the
           // responder. This typically means a gesture has succeeded
-          // console.warn(gestureState.dx)
-          if (gestureState.dx < -200) {
+
+          if (gestureState.dx < -150) {
             this.props.onSwipeForward()
           } else if (gestureState.dx === 0 && gestureState.dy === 0) {
             this.toggleInfo()
           }
           // else if(gestureState.dy < -250) {
-          //   props.onSwipeUp()
+          //   this.props.onSwipeUp()
           // }
           else {
             this.resetStyles()
           }
+
+          this.setState({
+            indicatorOpacity: 0
+          })
         },
         onPanResponderTerminate: (evt, gestureState) => {
           // Another component has become the responder, so this gesture
@@ -123,20 +139,27 @@ class DrinkCard extends Component {
 
   render() {
     return (
-      <SlideInView
-        style={this.state.styles}
-        panResponder={this.state.panResponder}
-      >
-        <Drink
-          {...this.props}
-          isShowing={this.state.isShowingInfo}
-          toggleInfo={this.toggleInfo.bind(this)}
-        />
+      <View>
+        <SlideInView
+          style={this.state.styles}
+          panResponder={this.state.panResponder}
+        >
+          <Drink
+            {...this.props}
+            isShowing={this.state.isShowingInfo}
+            toggleInfo={this.toggleInfo.bind(this)}
+          />
 
-        <Text style={styles.title}>
-          {this.props.title}
+          <Text style={styles.title}>
+            {this.props.title}
+          </Text>
+        </SlideInView>
+
+        <Text style={[styles.indicator, {opacity: this.state.indicatorOpacity}]}>
+          Next Drink
         </Text>
-      </SlideInView>
+      </View>
+
     )
   }
 
@@ -158,6 +181,12 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, .125)',
     shadowOpacity: 1,
   },
+  indicator: {
+    position: 'absolute',
+    right: 0,
+    top: 225,
+    fontSize: 20
+  }
 })
 
 export default DrinkCard
