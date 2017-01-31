@@ -19,7 +19,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading: true
+      isLoading: true,
+      drinks: []
     }
   }
 
@@ -35,17 +36,21 @@ class App extends Component {
 
     fetch(apiURL)
       .then(res => res.json())
-      .then(drink => {
+      .then(data => {
+
+        const drink = {
+          id: data.id,
+          title: data.title,
+          instructions: data.instructions,
+          ingredients: data.ingredients
+        }
 
         this.setState({
-          id: drink.id,
-          title: drink.title,
-          instructions: drink.instructions,
-          ingredients: drink.ingredients,
+          ...drink,
           isLoading: false
         })
-
       })
+
   }
 
   previousDrink() {
@@ -61,14 +66,10 @@ class App extends Component {
   render() {
 
     const app = this.state.isLoading ?
-
       <Image
         style={styles.iconBig}
         source={require('../../res/cheeers-logo.png')}
-      />
-
-      :
-
+      /> :
       <View>
         <View style={styles.logoTop}>
           <TouchableHighlight onPress={this.newDrink.bind(this)}>

@@ -9,7 +9,6 @@ import {
   Image,
   StyleSheet,
   TouchableHighlight,
-  Animated
 } from 'react-native'
 import { apiURL } from '../globals'
 
@@ -61,6 +60,7 @@ const styles = StyleSheet.create({
   image: {
     borderColor: '#000',
     borderWidth: 2,
+    borderRadius: 4,
     shadowColor: 'rgba(0, 0, 0, .125)',
     shadowOpacity: 1,
     width: 325,

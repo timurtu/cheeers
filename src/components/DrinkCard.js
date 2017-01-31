@@ -110,6 +110,7 @@ class DrinkCard extends Component {
 
           if (gestureState.dx < -150) {
             this.props.onSwipeForward()
+
           } else if (gestureState.dx === 0 && gestureState.dy === 0) {
             this.toggleInfo()
           }
@@ -176,6 +177,7 @@ const styles = StyleSheet.create({
     width: 325,
     borderColor: '#000',
     borderWidth: 2,
+    borderRadius: 4,
     padding: 8,
     textAlign: 'center',
     shadowColor: 'rgba(0, 0, 0, .125)',
